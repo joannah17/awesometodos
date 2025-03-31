@@ -8,17 +8,21 @@ const options = {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
-  }
+  },
+  tls: true, // Enforce TLS
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 };
 
 let client;
 const connectToMongoDB = async () => {
   if (!client) {
     try {
-      client = await MongoClient.connect(uri, options);
-      console.log("Connected to MongoDB");
+      client = new MongoClient(uri, options);
+      await client.connect();
+      console.log("✅ Connected to MongoDB");
     } catch (error) {
-      console.log(error);
+      console.error("❌ MongoDB connection error:", error);
     }
   }
   return client;
